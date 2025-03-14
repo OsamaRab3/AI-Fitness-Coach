@@ -1,0 +1,354 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Authentication API",
+      "description": "API endpoints for user authentication",
+      "version": "1.0.0"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:8080",
+        "description": "Development server"
+      }
+    ],
+    "paths": {
+      "/auth/login": {
+        "post": {
+          "tags": ["Authentication"],
+          "summary": "User login",
+          "description": "Authenticates a user and returns user data with an access token",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["email", "password"],
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "format": "email",
+                      "example": "osam1a@gaiml.com",
+                      "description": "User's email address"
+                    },
+                    "password": {
+                      "type": "string",
+                      "format": "password",
+                      "example": "1234",
+                      "description": "User's password"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Successful login",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "object",
+                        "properties": {
+                          "status": {
+                            "type": "string",
+                            "example": "success"
+                          },
+                          "user": {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string",
+                                "example": "67d3968af0eafbf665b44e7d"
+                              },
+                              "personalInfo": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string",
+                                    "example": "osama"
+                                  },
+                                  "email": {
+                                    "type": "string",
+                                    "format": "email",
+                                    "example": "osam1a@gaiml.com"
+                                  },
+                                  "gender": {
+                                    "type": "string",
+                                    "example": "Male",
+                                    "enum": ["Male", "Female", "Other"]
+                                  },
+                                  "age": {
+                                    "type": "integer",
+                                    "example": 20
+                                  },
+                                  "imageProfile": {
+                                    "type": "string",
+                                    "example": "avatar.png"
+                                  }
+                                }
+                              },
+                              "progress": {
+                                "type": "object",
+                                "properties": {
+                                  "workoutHistory": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object"
+                                    },
+                                    "example": []
+                                  },
+                                  "nutritionHistory": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object"
+                                    },
+                                    "example": []
+                                  },
+                                  "weightProgress": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object"
+                                    },
+                                    "example": []
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "token": {
+                            "type": "string",
+                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZDM5NjhhZjBlYWZiZjY2NWI0NGU3ZCIsImlhdCI6MTc0MTk1NTkzOSwiZXhwIjoxNzQxOTU5NTM5fQ.wufbQyVl6qkTkPzZfgyOkl4afhi1UPK-3L3deMYukY0"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request, missing required fields",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "error"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Email and password are required"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized, invalid credentials",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "error"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Invalid email or password"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/auth/signup": {
+        "post": {
+          "tags": ["Authentication"],
+          "summary": "User registration",
+          "description": "Registers a new user and returns user data with an access token",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["name", "email", "password", "gender", "age"],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "ALi",
+                      "description": "User's full name"
+                    },
+                    "email": {
+                      "type": "string",
+                      "format": "email",
+                      "example": "Ali@gaiml.com",
+                      "description": "User's email address"
+                    },
+                    "password": {
+                      "type": "string",
+                      "format": "password",
+                      "example": "1234",
+                      "description": "User's password"
+                    },
+                    "gender": {
+                      "type": "string",
+                      "example": "Male",
+                      "enum": ["Male", "Female", "Other"],
+                      "description": "User's gender"
+                    },
+                    "age": {
+                      "type": "integer",
+                      "example": 20,
+                      "description": "User's age"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Successful registration",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "object",
+                        "properties": {
+                          "status": {
+                            "type": "string",
+                            "example": "success"
+                          },
+                          "user": {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string",
+                                "example": "67d424625c187c9028016b15"
+                              },
+                              "personalInfo": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string",
+                                    "example": "ALi"
+                                  },
+                                  "email": {
+                                    "type": "string",
+                                    "format": "email",
+                                    "example": "Ali@gaiml.com"
+                                  },
+                                  "gender": {
+                                    "type": "string",
+                                    "example": "Male",
+                                    "enum": ["Male", "Female", "Other"]
+                                  },
+                                  "age": {
+                                    "type": "integer",
+                                    "example": 20
+                                  },
+                                  "imageProfile": {
+                                    "type": "string",
+                                    "example": "avatar.png"
+                                  }
+                                }
+                              },
+                              "progress": {
+                                "type": "object",
+                                "properties": {
+                                  "workoutHistory": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object"
+                                    },
+                                    "example": []
+                                  },
+                                  "nutritionHistory": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object"
+                                    },
+                                    "example": []
+                                  },
+                                  "weightProgress": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object"
+                                    },
+                                    "example": []
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "token": {
+                            "type": "string",
+                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZDQyNDYyNWMxODdjOTAyODAxNmIxNSIsImlhdCI6MTc0MTk1NjE5NCwiZXhwIjoxNzQxOTU5Nzk0fQ.oUyZVc5k2NwYrjmV7M08hWYpSc49ReW-CLo-zy6EbPs"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request, missing required fields or validation error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "error"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "All fields are required"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict, email already exists",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "error"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Email already exists"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }

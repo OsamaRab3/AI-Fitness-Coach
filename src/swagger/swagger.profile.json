@@ -1,0 +1,227 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "User Profile API",
+      "description": "API endpoints for user profile management",
+      "version": "1.0.0"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:8080",
+        "description": "Development server"
+      }
+    ],
+    "paths": {
+      "/profile/{userId}": {
+        "get": {
+          "tags": ["Profile"],
+          "summary": "Get user profile",
+          "description": "Retrieves detailed user profile information by user ID",
+          "parameters": [
+            {
+              "name": "userId",
+              "in": "path",
+              "required": true,
+              "description": "The unique identifier of the user",
+              "schema": {
+                "type": "string",
+                "example": "67d3968af0eafbf665b44e7d"
+              }
+            }
+          ],
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful profile retrieval",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "data": {
+                        "type": "object",
+                        "properties": {
+                          "user": {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string",
+                                "example": "67d3968af0eafbf665b44e7d"
+                              },
+                              "personalInfo": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string",
+                                    "example": "osama"
+                                  },
+                                  "email": {
+                                    "type": "string",
+                                    "format": "email",
+                                    "example": "osam1a@gaiml.com"
+                                  },
+                                  "gender": {
+                                    "type": "string",
+                                    "example": "Male",
+                                    "enum": ["Male", "Female", "Other"]
+                                  },
+                                  "age": {
+                                    "type": "integer",
+                                    "example": 20
+                                  },
+                                  "imageProfile": {
+                                    "type": "string",
+                                    "example": "avatar.png"
+                                  }
+                                }
+                              },
+                              "healthMetrics": {
+                                "type": "object",
+                                "properties": {
+                                  "activityLevel": {
+                                    "type": "string",
+                                    "example": "Moderately active",
+                                    "enum": ["Sedentary", "Lightly active", "Moderately active", "Very active", "Extremely active"]
+                                  }
+                                }
+                              },
+                              "preferences": {
+                                "type": "object",
+                                "properties": {
+                                  "workout": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    },
+                                    "example": []
+                                  },
+                                  "dietary": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    },
+                                    "example": []
+                                  },
+                                  "availableEquipment": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    },
+                                    "example": []
+                                  }
+                                }
+                              },
+                              "progress": {
+                                "type": "object",
+                                "properties": {
+                                  "workoutHistory": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object"
+                                    },
+                                    "example": []
+                                  },
+                                  "nutritionHistory": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object"
+                                    },
+                                    "example": []
+                                  },
+                                  "weightProgress": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object"
+                                    },
+                                    "example": []
+                                  }
+                                }
+                              },
+                              "fitnessGoals": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "example": []
+                              },
+                              "createdAt": {
+                                "type": "string",
+                                "format": "date-time",
+                                "example": "2025-03-14T02:38:02.526Z"
+                              },
+                              "updatedAt": {
+                                "type": "string",
+                                "format": "date-time",
+                                "example": "2025-03-14T02:38:02.526Z"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized, invalid or missing token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "error"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Unauthorized access"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "User not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "error"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "User not found"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "securitySchemes": {
+        "bearerAuth": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      }
+    }
+  }
