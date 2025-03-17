@@ -9,6 +9,11 @@ connectDB()
 app.use(express.json({ limit: "50mb" }));
 app.timeout = 120000;
 
+
+
+app.get('/',(req,res)=>{
+    res.send("Welcome in Ai fetness coach ")
+})
 // const swaggerUi = require('swagger-ui-express');
 // const combinedSwaggerDoc = require('./swagger/index');
 // app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(combinedSwaggerDoc));
