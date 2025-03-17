@@ -6,6 +6,7 @@ const profileController = require('../controllers/profile.controller')
 
 router.route('/:userId')
 .get(profileController.getUserProfile)
+.patch(profileController.updateUserProfile)
 
 
 
