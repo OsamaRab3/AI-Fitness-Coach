@@ -9,9 +9,9 @@ connectDB()
 app.use(express.json({ limit: "50mb" }));
 app.timeout = 120000;
 
-const swaggerUi = require('swagger-ui-express');
-const combinedSwaggerDoc = require('./swagger/index');
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(combinedSwaggerDoc));
+// const swaggerUi = require('swagger-ui-express');
+// const combinedSwaggerDoc = require('./swagger/index');
+// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(combinedSwaggerDoc));
 
 
 const authRouter = require('./api/routes/auth')
