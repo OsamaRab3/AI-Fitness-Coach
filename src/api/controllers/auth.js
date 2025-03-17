@@ -19,9 +19,9 @@ const login = asyncErrorHandler(async (req, res, next) => {
 
 
 const signup = asyncErrorHandler(async (req, res, next) => {
-    const { name, email, password,gender ,age} = req.body;
+    const { name, email, password} = req.body;
 
-    const {user,token} = await authService.signup(name, email, password,gender,age)
+    const {user,token} = await authService.signup(name, email, password)
 
     res.status(201).json({
         data: {

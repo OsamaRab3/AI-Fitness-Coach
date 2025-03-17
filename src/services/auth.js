@@ -1,8 +1,8 @@
 const User = require('../models/userSchema');
 const CustomError = require('../utils/CustomError');
 const bcrypt = require('bcryptjs');
-// const jwt = require('jsonwebtoken');
 const generateToken = require('../utils/generateToken')
+
 const login = async (email, password) => {
     if (!email || !password) {
         throw new CustomError('Email and password are required', 400);
@@ -33,9 +33,9 @@ const login = async (email, password) => {
 
 };
 
-const signup = async (name, email, password,gender,age) => {
+const signup = async (name, email, password) => {
 
-    if (!name || !email || !password ||!age||!gender) {
+    if (!name || !email || !password ) {
         throw new CustomError('Name, email and password are required', 400);
     }
 
@@ -50,9 +50,7 @@ const signup = async (name, email, password,gender,age) => {
     const newUser = await User.create({
         personalInfo: {
             name,
-            email,
-            age,
-            gender
+            email
         },
         auth: {
             password: hashedPassword
@@ -65,6 +63,7 @@ const signup = async (name, email, password,gender,age) => {
     const user = await User.findById(newUser._id, {
         __v: 0,
         auth: 0,
+        progress:0,
         fitnessGoals: 0,
         healthMetrics: 0,
         preferences: 0,
