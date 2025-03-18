@@ -72,36 +72,37 @@ const generateWorkoutPlan = async (userId) => {
 
 const saveWorkoutPlan = async (userId) => {
   const generatedPlan = await generateWorkoutPlan(userId);
+  console.log("generated workoutplan is: ",generatedPlan)
 
-  const exerciseNames = new Set();
-
-
-  generatedPlan.exercises.forEach(exerciseData => {
-    exerciseNames.add(exerciseData.exercise.name);
-  });
+  // const exerciseNames = new Set();
 
 
-  generatedPlan.schedule.forEach(daySchedule => {
-    daySchedule.exercises.forEach(scheduleExercise => {
-      exerciseNames.add(scheduleExercise.exercise);
-    });
-  });
+  // generatedPlan.exercises.forEach(exerciseData => {
+  //   exerciseNames.add(exerciseData.exercise.name);
+  // });
 
 
-  const exerciseNameArray = Array.from(exerciseNames);
-  const existingExercises = await Exercise.find({ name: { $in: exerciseNameArray } });
+  // generatedPlan.schedule.forEach(daySchedule => {
+  //   daySchedule.exercises.forEach(scheduleExercise => {
+  //     exerciseNames.add(scheduleExercise.exercise);
+  //   });
+  // });
 
 
-  const exerciseMap = {};
-  existingExercises.forEach(exercise => {
-    exerciseMap[exercise.name] = exercise._id;
-  });
+  // const exerciseNameArray = Array.from(exerciseNames);
+  // const existingExercises = await Exercise.find({ name: { $in: exerciseNameArray } });
+
+
+  // const exerciseMap = {};
+  // existingExercises.forEach(exercise => {
+  //   exerciseMap[exercise.name] = exercise._id;
+  // });
 
 
   const workoutPlan = new WorkoutPlan({
     name: generatedPlan.name,
     exercises: generatedPlan.exercises.map(exerciseData => ({
-      exercise: exerciseMap[exerciseData.exercise.name],
+      exercise:exerciseData.name ,
       sets: exerciseData.sets,
       reps: exerciseData.reps,
       duration: exerciseData.duration
@@ -109,7 +110,7 @@ const saveWorkoutPlan = async (userId) => {
     schedule: generatedPlan.schedule.map(daySchedule => ({
       day: daySchedule.day,
       exercises: daySchedule.exercises.map(scheduleExercise => ({
-        exercise: exerciseMap[scheduleExercise.exercise],
+        exercise:scheduleExercise.name,
         sets: scheduleExercise.sets,
         reps: scheduleExercise.reps
       }))
@@ -178,15 +179,12 @@ const generateNutritionPlan = async (userId) => {
     }
     
     Additional requirements:
-    - Include 7-day meal plan with 6 meals per day (breakfast, snacks, lunch, dinner)
+    - Include 7-day meal plan with 3 meals per day (breakfast, lunch, dinner)
     - Use metric measurements (grams, milliliters)
     - personalInfo: ${user.personalInfo.age}  ${user.personalInfo.gender}
     - Avoid: ${user.preferences.dietaryRestrictions?.join(', ') || 'common allergens'}
     - Focus on: ${user.preferences.dietaryPreferences?.join(', ') || 'balanced diet'}
     - Cooking tips for each recipe
-    - Macronutrient breakdown for each meal
-    - Progressive overload plan for calories
-    - Shopping list suggestions
     - Just send a Json format don't add any addtion data
     `;
   const nutritionPlan = await genertPrompt(prompt);
@@ -215,16 +213,11 @@ const saveNutritionPlan = async (userId) => {
       fats: parseInt(generatedPlan.dailyTargets.fats)
     },
     meals: [],
-    supplements: generatedPlan.supplements.map(supp => ({
-      name: supp.name,
-      dosage: supp.dosage,
-      timing: supp.timing
-    }))
   });
 
 
   const days = [1, 2, 3, 4, 5, 6, 7];
-  const mealTypes = ["Breakfast", "Morning Snack", "Lunch", "Afternoon Snack", "Dinner", "Evening Snack"];
+  const mealTypes = ["Breakfast", "Lunch", "Dinner"];
 
   generatedPlan.meals.forEach(meal => {
     days.forEach(day => {
