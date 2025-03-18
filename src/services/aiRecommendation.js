@@ -9,7 +9,10 @@ const NutritionPlan = require('../models/nutritionPlanSchema')
 const generateWorkoutPlan = async (userId) => {
   const user = await getUserProfile(userId);
   if (!user) throw new CustomError("User not found", 404);
-
+  
+  if (!user.healthMetrics?.weight || !user.preferences?.availableEquipment) {
+    throw new CustomError("Please complete your profile", 400);
+  }
 
   const prompt = `
     Create a personalized workout plan in JSON format matching this structure:
@@ -133,6 +136,10 @@ const saveWorkoutPlan = async (userId) => {
 const generateNutritionPlan = async (userId) => {
   const user = await getUserProfile(userId);
   if (!user) throw new CustomError("User not found", 404);
+  
+    if (!user.healthMetrics?.weight || !user.preferences?.availableEquipment) {
+      throw new CustomError("Please complete your profile", 400);
+    }
 
 
   const prompt = `
