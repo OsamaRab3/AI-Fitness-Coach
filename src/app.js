@@ -8,9 +8,24 @@ connectDB()
 
 app.use(express.json({ limit: "50mb" }));
 app.timeout = 120000;
+const cors = require('cors')
+const { createProxyMiddleware } = require("http-proxy-middleware");
 
 
+const config = require('./config/index')
 
+app.use(
+    "/mongo",
+    createProxyMiddleware({
+      target:config.MONGODB_URI, 
+      changeOrigin: true,
+      pathRewrite: { "^/mongo": "" },
+      secure: true,
+    })
+  );
+  
+
+app.use(cors())
 app.get('/',(req,res)=>{
     res.send("Welcome in Ai fetness coach ")
 })
