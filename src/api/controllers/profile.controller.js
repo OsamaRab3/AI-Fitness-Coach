@@ -54,9 +54,25 @@ const updateUserProfile = asyncErrorHandler(async (req, res, next) => {
 
   
 
+  const getProfileCompletionStatus = asyncErrorHandler(async (req, res) => {
+    const {userId} = req.params;
 
+    const {isComplete,missingFields} = await profilService.isProfileComplete(userId);
+    
+    res.status(200).json({
+      status: "success",
+      
+      data: {
+        isComplete,
+        missingFields,
+      message: isComplete ? "All fields are complete" : "Please complete all required fields"
+
+      }
+    });
+  });
 
 module.exports = {
     getUserProfile,
-    updateUserProfile   
+    updateUserProfile   ,
+    getProfileCompletionStatus
 }

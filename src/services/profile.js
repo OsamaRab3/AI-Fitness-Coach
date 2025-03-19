@@ -31,6 +31,60 @@ const getUSerById = async (userId)=>{
 }
 
 
+
+
+const isProfileComplete = async (userId) => {
+    if (!userId) {
+      throw new CustomError("User Id is required", 400);
+    }
+  
+    const user = await User.findById(userId,{__v:0});
+    if (!user) {
+      throw new CustomError("User not found", 404);
+    }
+
+    const requiredFields = {
+      personalInfo: ['name', 'email', 'gender', 'age'],
+      healthMetrics: ['weight', 'height'],
+      preferences: ['workout', 'dietary', 'timeAvailability'],
+      fitnessGoals: true
+    };
+  
+    const missingFields = [];
+
+    requiredFields.personalInfo.forEach(field => {
+      if (!user.personalInfo[field]) {
+        missingFields.push(`personalInfo.${field}`);
+      }
+    });
+
+    requiredFields.healthMetrics.forEach(field => {
+      if (!user.healthMetrics[field]) {
+        missingFields.push(`healthMetrics.${field}`);
+      }
+    });
+   
+    requiredFields.preferences.forEach(field => {
+      if (!user.preferences[field] || 
+          (Array.isArray(user.preferences[field]) && user.preferences[field].length === 0)) {
+        missingFields.push(`preferences.${field}`);
+      }
+    });
+  
+
+    if (requiredFields.fitnessGoals && (!user.fitnessGoals || user.fitnessGoals.length === 0)) {
+      missingFields.push('fitnessGoals');
+    }
+  
+  
+    return {
+      isComplete: missingFields.length === 0,
+      missingFields
+    };
+  };
+  
+
+
 const updateUserProfile = async(userId,updateData) =>{
    const user =  await getUSerById(userId)
    if (!user){
@@ -61,6 +115,7 @@ const updateUserProfile = async(userId,updateData) =>{
 module.exports = {
     getUserProfile,
     updateUserProfile,
-    getUSerById
+    getUSerById,
+    isProfileComplete
 
 }
