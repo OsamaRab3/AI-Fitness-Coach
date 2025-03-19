@@ -86,8 +86,7 @@ const createExercise = async (userId) => {
   const response = await genertPrompt(prompt);
   const cleanedPlan = response.replace(/```json/g, '').replace(/```/g, '').trim();
   let parsedPlan = JSON.parse(cleanedPlan);
-  console.log("parsplanis : ", parsedPlan)
-
+  
   const exercisePromises = parsedPlan.map(async (exercise) => {
     const imagePath = await generateExerciseImage(
       exercise.name,
@@ -111,7 +110,6 @@ const createExercise = async (userId) => {
   const exercisesWithImages = await Promise.all(exercisePromises);
   const savedExercises = await Exercise.insertMany(exercisesWithImages);
 
-  console.log("savedExercises to database is: ", savedExercises)
 
   return savedExercises;
 

@@ -9,4 +9,8 @@ router.route('/:userId/workout-plan')
 router.route('/:userId/nutrition-plan')
     .get(aiPlan.generateNutritionPlan)
 
+
+
+router.route('/:userId/nutrition-plan/user')
+    .get(aiPlan.getUserNutritionPlans)
 module.exports = router;

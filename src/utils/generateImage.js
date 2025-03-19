@@ -39,7 +39,6 @@ async function generateExerciseImage(exerciseName, description, targetMuscles) {
         const imageData = part.inlineData.data;
         const buffer = Buffer.from(imageData, 'base64');
         fs.writeFileSync(filePath, buffer);
-        console.log(`Image saved as ${filename}`);
         return filename;
       }
     }

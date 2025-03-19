@@ -28,9 +28,22 @@ const generateNutritionPlan = asyncErrorHandler(async(req,res,next)=>{
 
 })
 
+const getUserNutritionPlans = asyncErrorHandler(async (req, res) => {
+    const { userId } = req.params; 
+    
+    const plans = await aiRecommendationServices.getNutritionUserPlan (userId);
+    
+    res.status(200).json({
+      status:"success" ,
+      data: plans
+    });
+  });
 
+
+  
 
 module.exports = {
     generateWorkoutPlan,
-    generateNutritionPlan
+    generateNutritionPlan,
+    getUserNutritionPlans
 }

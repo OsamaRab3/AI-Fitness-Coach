@@ -3,7 +3,9 @@ const CustomError = require('../utils/CustomError');
 const Exercise = require('../models/exerciseSchema')
 const WorkoutPlan = require('../models/workoutPlanSchema')
 const genertPrompt = require('../utils/genertPrompt')
-const NutritionPlan = require('../models/nutritionPlanSchema')
+const NutritionPlan = require('../models/nutritionPlanSchema');
+const User = require('../models/userSchema');
+// const nutritionPlanSchema = require('../models/nutritionPlanSchema');
 
 
 const generateWorkoutPlan = async (userId) => {
@@ -75,7 +77,7 @@ const generateWorkoutPlan = async (userId) => {
 
 const saveWorkoutPlan = async (userId) => {
   const generatedPlan = await generateWorkoutPlan(userId);
-  console.log("generated workoutplan is: ",generatedPlan)
+  // console.log("generated workoutplan is: ",generatedPlan)
 
   // const exerciseNames = new Set();
 
@@ -255,6 +257,22 @@ const saveNutritionPlan = async (userId) => {
 };
 
 
+const getNutritionUserPlan = async (userId) => {
+  if (!userId) {
+    throw new CustomError("User Id is required", 400);
+  }
+  
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new CustomError("User not found", 404);
+  }
 
+  const plans = await NutritionPlan.find({
+    user: userId
+  }, { __v: 0 });
 
-module.exports = { generateWorkoutPlan, generateNutritionPlan, saveNutritionPlan, saveWorkoutPlan };
+  
+  return plans;
+};
+module.exports = { generateWorkoutPlan, generateNutritionPlan, saveNutritionPlan, saveWorkoutPlan ,getNutritionUserPlan};
+
