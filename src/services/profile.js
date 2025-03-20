@@ -85,32 +85,27 @@ const isProfileComplete = async (userId) => {
   
 
 
-const updateUserProfile = async(userId,updateData) =>{
-   const user =  await getUSerById(userId)
-   if (!user){
-    throw new CustomError("User not found",404)
-   }
-   const updatedUser = await User.findByIdAndUpdate(
-    userId,
-    { $set: updateData },
-    { new: true, runValidators: true },
-  );
+  const updateUserProfile = async(userId,updateData) =>{
+    const user =  await getUSerById(userId)
+    if (!user){
+      throw new CustomError("User not found",404)
+    }
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $set: updateData },
+      { new: true, runValidators: true },
+    );
+    
+    updatedUser.updatedAt = Date.now();
+    await updatedUser.save();
+    const userAfterUpdate = await User.findById(
+      userId,
+      { auth: 0, __v: 0 ,createdAt:0,updatedAt:0}
+    );
+    
+    return userAfterUpdate;
+  }
 
-
-  
-
-  updatedUser.updatedAt = Date.now();
-  await updatedUser.save();
-
-  const userAfterUpdate = await User.findById(
-    userId,
-    { auth: 0, __v: 0 ,createdAt:0,updatedAt:0}
-  );
-  
-  return userAfterUpdate;
-
-
-}
 
 module.exports = {
     getUserProfile,

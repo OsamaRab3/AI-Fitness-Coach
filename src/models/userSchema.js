@@ -11,11 +11,20 @@ const userSchema = new mongoose.Schema({
       default: 'avatar.png'
     }
   },
-  fitnessGoals: [{
-    goalType: { type: String },
-    target: mongoose.Schema.Types.Mixed,
-    deadline: Date
-  }],
+  fitnessGoals: {
+    type: [{
+      goalType: { type: String },
+      target: mongoose.Schema.Types.Mixed,
+      deadline: Date
+    }]},
+  //   default: [
+  //     {
+  //       goalType: "weight",
+  //       target: 70,
+  //       deadline: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000) 
+  //     }
+  //   ]
+  // },
   healthMetrics: {
     weight: { type: Number},
     height: { type: Number },
