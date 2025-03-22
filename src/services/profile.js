@@ -47,7 +47,6 @@ const isProfileComplete = async (userId) => {
       personalInfo: ['name', 'email', 'gender', 'age'],
       healthMetrics: ['weight', 'height'],
       preferences: ['workout', 'dietary', 'timeAvailability'],
-      fitnessGoals: true
     };
   
     const missingFields = [];
@@ -72,10 +71,6 @@ const isProfileComplete = async (userId) => {
     });
   
 
-    if (requiredFields.fitnessGoals && (!user.fitnessGoals || user.fitnessGoals.length === 0)) {
-      missingFields.push('fitnessGoals');
-    }
-  
   
     return {
       isComplete: missingFields.length === 0,
